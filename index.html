@@ -43,6 +43,7 @@
 
 <div class="no-print flex flex-col min-h-screen w-full">
 
+  <!-- VIEW LOGIN -->
   <div id="view-login" class="flex flex-col min-h-screen w-full items-center justify-center p-6 bg-white block">
     <div class="w-full max-w-sm">
       <div class="text-center mb-6">
@@ -64,6 +65,7 @@
     </div>
   </div>
 
+  <!-- MODAL ALERT -->
   <div id="alert-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[60] flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl p-6 w-full max-w-sm text-center">
       <span class="material-symbols-outlined text-4xl text-[#E25C54] mb-2">warning</span>
@@ -73,11 +75,12 @@
     </div>
   </div>
 
+  <!-- MODAL SUCCESS -->
   <div id="success-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[60] flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl p-6 w-full max-w-sm text-center">
       <span class="material-symbols-outlined text-5xl text-[#34A853] mb-2">check_circle</span>
       <h3 class="text-lg font-bold text-gray-900 mb-2">Berhasil</h3>
-      <p class="text-sm text-gray-600 mb-6">Pengajuan berhasil dikirim dan otomatis disetujui.</p>
+      <p class="text-sm text-gray-600 mb-6">Pengajuan Anda telah dikirim dan menunggu persetujuan Manajer.</p>
       <div class="flex flex-col gap-3">
         <button onclick="printForm()" class="w-full border-2 border-[#34A853] text-[#34A853] py-3 rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-green-50">
           <span class="material-symbols-outlined">print</span> Cetak Permohonan
@@ -87,6 +90,7 @@
     </div>
   </div>
 
+  <!-- VIEW DASHBOARD -->
   <div id="view-dashboard" class="hidden flex-col min-h-screen w-full pb-20">
     <header class="bg-white pt-10 pb-6 px-6 relative border-b border-gray-100">
       <div class="flex items-center gap-3 mb-2">
@@ -97,7 +101,7 @@
         U
       </div>
       <h1 class="text-[26px] font-extrabold text-[#111827] leading-snug text-left mt-2">
-        Dashboard<br/>Pengelola
+        Dashboard<br/><span id="title-role">Pengelola</span>
       </h1>
     </header>
 
@@ -119,16 +123,16 @@
         </div>
       </section>
 
-      <div class="px-6 -mt-10 flex items-start gap-5">
-        <section class="w-[60%] flex-shrink-0">
+      <div class="px-6 -mt-10 flex flex-col md:flex-row items-start gap-5">
+        <section class="w-full md:w-[60%] flex-shrink-0">
           <h2 class="text-lg font-bold text-gray-900 mb-4">Aktivitas Terbaru</h2>
           <div id="container-aktivitas" class="bg-white rounded-[2rem] p-6 shadow-sm border border-gray-50">
             <p class="text-sm text-gray-500">Memuat data...</p>
           </div>
         </section>
 
-        <aside class="w-[40%] flex-shrink-0">
-          <div class="mt-11 bg-white rounded-3xl p-4 shadow-sm border border-gray-50">
+        <aside class="w-full md:w-[40%] flex-shrink-0">
+          <div class="md:mt-11 bg-white rounded-3xl p-4 shadow-sm border border-gray-50">
             <h2 class="text-[13px] font-bold text-gray-900 mb-4 leading-tight">Tim Cuti Hari Ini</h2>
             <div id="container-tim-cuti" class="space-y-4">
               <p class="text-xs text-gray-500">Memuat data...</p>
@@ -139,6 +143,7 @@
     </main>
   </div>
 
+  <!-- VIEW FORM PENGAJUAN (STAF) -->
   <div id="view-form" class="hidden flex-col min-h-screen w-full pb-24 bg-[#F8F9FA]">
     <header class="bg-white px-4 py-4 flex items-center justify-between sticky top-0 z-10 border-b border-gray-100 shadow-sm">
       <button aria-label="Kembali" class="p-2" onclick="switchView('view-dashboard')"><span class="material-symbols-outlined text-gray-600 text-3xl">chevron_left</span></button>
@@ -180,6 +185,14 @@
             <p class="text-sm mb-1">Total Hari Digunakan: <span id="text_hari_kerja" class="font-bold text-lg text-[#34A853]">0</span> hari kerja</p>
             <p class="text-xs text-gray-500">Otomatis melewati Sabtu, Minggu, dan Libur Nasional.</p>
           </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2" for="delegasi">Delegasi Tugas (Karyawan Pengganti)</label>
+            <select class="block w-full rounded-xl border-gray-300 bg-gray-50 p-3 focus:ring-[#34A853] focus:border-[#34A853]" id="delegasi" name="delegasi" required>
+              <option value="">Pilih Karyawan Pengganti...</option>
+              <!-- Populated dynamically via JS -->
+            </select>
+          </div>
           
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2" for="alasan">Alasan Detail</label>
@@ -195,6 +208,24 @@
     </main>
   </div>
 
+  <!-- VIEW APPROVAL (KHUSUS MANAJER) -->
+  <div id="view-approval" class="hidden flex-col min-h-screen w-full pb-24 bg-[#F8F9FA]">
+    <header class="bg-white px-4 py-4 flex items-center justify-between sticky top-0 z-10 border-b border-gray-100 shadow-sm">
+      <button class="p-2" onclick="switchView('view-dashboard')"><span class="material-symbols-outlined text-gray-600 text-3xl">chevron_left</span></button>
+      <h1 class="text-lg font-bold text-gray-800">Persetujuan Cuti</h1>
+      <img src="https://i.ibb.co.com/WvTwLMn5/image-1.png" alt="Logo" class="h-8 object-contain">
+    </header>
+
+    <main class="p-4 flex-grow space-y-4">
+      <p class="text-sm text-gray-600 mb-2 font-medium">Daftar Menunggu Persetujuan</p>
+      <div id="container-approval-list" class="space-y-4">
+        <!-- Approval cards go here -->
+        <p class="text-sm text-gray-500 bg-white p-4 rounded-xl text-center shadow-sm">Memuat data persetujuan...</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- VIEW CALENDAR -->
   <div id="view-calendar" class="hidden flex-col min-h-screen w-full pb-24 bg-[#F8F9FA]">
     <header class="bg-white px-4 py-4 flex items-center justify-between sticky top-0 z-10 border-b border-gray-100 shadow-sm">
       <button class="p-2" onclick="switchView('view-dashboard')"><span class="material-symbols-outlined text-gray-600 text-3xl">chevron_left</span></button>
@@ -223,6 +254,7 @@
     </main>
   </div>
 
+  <!-- VIEW PROFILE -->
   <div id="view-profile" class="hidden flex-col min-h-screen w-full pb-24 bg-[#F8F9FA] items-center pt-8 px-4">
     
     <div class="relative w-full max-w-sm rounded-[2rem] shadow-xl overflow-hidden flex flex-col items-center pt-10 pb-8 bg-white border border-gray-100" style="background-image: url('https://i.ibb.co.com/1JMMrJs0/Gemini-Generated-Image-h21xo5h21xo5h21x.png'); background-size: cover; background-position: center; min-height: 550px;">
@@ -277,15 +309,25 @@
     </button>
   </div>
 
+  <!-- NAVIGATION BAR -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-center pt-3 pb-safe z-50 shadow-[0_-4px_10px_rgba(0,0,0,0.02)]">
     <a class="flex flex-col items-center gap-1 cursor-pointer w-16" onclick="switchView('view-dashboard')">
       <div class="p-1"><span class="material-symbols-outlined text-gray-400" id="nav-icon-dashboard">home</span></div>
       <span class="text-[11px] font-medium text-gray-400" id="nav-text-dashboard">Dashboard</span>
     </a>
-    <a class="flex flex-col items-center gap-1 cursor-pointer w-16" onclick="switchView('view-form')">
+    
+    <!-- Item untuk Staf (Formulir) -->
+    <a id="nav-item-form" class="flex flex-col items-center gap-1 cursor-pointer w-16" onclick="switchView('view-form')">
       <div class="p-1"><span class="material-symbols-outlined text-gray-400" id="nav-icon-form">edit_document</span></div>
       <span class="text-[11px] font-medium text-gray-400" id="nav-text-form">Pengajuan</span>
     </a>
+
+    <!-- Item Khusus Manajer (Approval) -->
+    <a id="nav-item-approval" class="hidden flex-col items-center gap-1 cursor-pointer w-16" onclick="switchView('view-approval')">
+      <div class="p-1"><span class="material-symbols-outlined text-gray-400" id="nav-icon-approval">fact_check</span></div>
+      <span class="text-[11px] font-medium text-gray-400" id="nav-text-approval">Approval</span>
+    </a>
+
     <a class="flex flex-col items-center gap-1 cursor-pointer w-16" onclick="switchView('view-calendar')">
       <div class="p-1"><span class="material-symbols-outlined text-gray-400" id="nav-icon-calendar">calendar_month</span></div>
       <span class="text-[11px] font-medium text-gray-400" id="nav-text-calendar">Kalender</span>
@@ -299,6 +341,7 @@
 </div> 
 
 <div id="print-layout" class="print-only hidden text-black bg-white">
+  <!-- Layout Cetak -->
   <div class="flex items-center justify-center border-b-4 border-black pb-4 mb-6">
     <img src="https://i.ibb.co.com/WvTwLMn5/image-1.png" class="h-28 mr-6 object-contain">
     <div class="text-center flex-1 pr-12">
@@ -312,9 +355,7 @@
   
   <div class="px-8 mt-8">
     <h2 class="text-xl font-bold text-center underline mb-8">SURAT PERMOHONAN CUTI / IZIN</h2>
-    
     <p class="mb-4 text-justify">Yang bertanda tangan di bawah ini:</p>
-    
     <table class="mb-6 w-full ml-4">
       <tr><td class="w-48 pb-3">Nama</td><td class="w-4 pb-3">:</td><td class="pb-3 font-semibold"><span id="print-nama"></span></td></tr>
       <tr><td class="w-48 pb-3">Jabatan</td><td class="w-4 pb-3">:</td><td class="pb-3"><span id="print-jabatan"></span></td></tr>
@@ -322,12 +363,11 @@
     
     <p class="mb-4 text-justify leading-relaxed">
       Dengan ini bermaksud mengajukan permohonan <strong><span id="print-jenis"></span></strong> 
-      selama <strong><span id="print-durasi"></span> hari kerja</strong>.
+      selama <strong><span id="print-durasi"></span> hari kerja</strong>. Terhitung mulai tanggal <strong><span id="print-mulai"></span></strong> sampai dengan <strong><span id="print-selesai"></span></strong>.
     </p>
-    
+
     <p class="mb-4 text-justify leading-relaxed">
-      Adapun permohonan tersebut terhitung mulai tanggal <strong><span id="print-mulai"></span></strong> 
-      sampai dengan tanggal <strong><span id="print-selesai"></span></strong>.
+      Selama menjalankan cuti/izin, tugas dan tanggung jawab pekerjaan akan didelegasikan kepada: <strong><span id="print-delegasi"></span></strong>.
     </p>
     
     <p class="mb-8 text-justify leading-relaxed">
@@ -342,7 +382,8 @@
     <div class="flex justify-between text-center mt-12 px-8">
       <div>
         <p class="mb-24">Mengetahui / Menyetujui,</p>
-        <p class="font-bold underline">Manager Koperasi</p>
+        <p class="font-bold underline">Fedrik Christian</p>
+        <p class="text-sm">Manager Koperasi</p>
       </div>
       <div>
         <p class="mb-24">Tabalong, <span id="print-tgl-pengajuan"></span><br>Hormat Saya,</p>
@@ -355,18 +396,17 @@
 <script>
   let loggedInUser = "";
   let loggedInJabatan = "";
+  let isManager = false;
   let calendarDate = new Date();
   let calendarLeaves = [];
   let referensiCuti = [];
   let currentPrintData = {}; 
   
+  // URL BARU YANG DIUPDATE
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzDZQPf1U3Nfdccrc2ckxIrKe3A0NXQ9Xkxj0lFBYcDvf7Npy-8qfJkXHY9VFvoNjUj/exec';
+
   const liburNasional = [
-    "2026-01-01", "2026-02-17", "2026-03-03", "2026-03-20", "2026-03-21", "2026-04-03", "2026-05-01", "2026-05-14", "2026-06-01", "2026-07-19", "2026-08-17", "2026-09-16", "2026-12-25",
-    "2027-01-01", "2027-02-08", "2027-03-10", "2027-04-09", "2027-05-01", "2027-05-06", "2027-06-01", "2027-08-17", "2027-12-25",
-    "2028-01-01", "2028-01-28", "2028-03-03", "2028-04-14", "2028-05-01", "2028-05-25", "2028-06-01", "2028-08-17", "2028-12-25",
-    "2029-01-01", "2029-02-15", "2029-03-30", "2029-05-01", "2029-05-10", "2029-06-01", "2029-08-17", "2029-12-25",
-    "2030-01-01", "2030-02-05", "2030-03-08", "2030-04-19", "2030-05-01", "2030-05-30", "2030-06-01", "2030-08-17", "2030-12-25",
-    "2031-01-01", "2031-01-23", "2031-01-24", "2031-01-25", "2031-03-24", "2031-04-02", "2031-04-11", "2031-04-23", "2031-05-01", "2031-05-22", "2031-06-01", "2031-07-02", "2031-08-17", "2031-12-25"
+    "2026-01-01", "2026-02-17", "2026-03-03", "2026-03-20", "2026-03-21", "2026-04-03", "2026-05-01", "2026-05-14", "2026-06-01", "2026-07-19", "2026-08-17", "2026-09-16", "2026-12-25"
   ];
 
   function isHariKerja(date) {
@@ -385,9 +425,7 @@
     endDate.setHours(0,0,0,0);
     
     while (curDate <= endDate) {
-      if (isHariKerja(curDate)) {
-        count++;
-      }
+      if (isHariKerja(curDate)) count++;
       curDate.setDate(curDate.getDate() + 1);
     }
     return count;
@@ -405,21 +443,17 @@
     const infoBox = document.getElementById('info_kalkulasi');
     const textHari = document.getElementById('text_hari_kerja');
 
-    if (infoBox && textHari) {
-      if (tglMulaiStr && tglSelesaiStr) {
-        const start = new Date(tglMulaiStr);
-        const end = new Date(tglSelesaiStr);
-        
-        if (end >= start) {
-          const hariKerja = hitungHariKerja(start, end);
-          textHari.innerText = hariKerja;
-          infoBox.classList.remove('hidden');
-        } else {
-          infoBox.classList.add('hidden');
-        }
+    if (infoBox && textHari && tglMulaiStr && tglSelesaiStr) {
+      const start = new Date(tglMulaiStr);
+      const end = new Date(tglSelesaiStr);
+      if (end >= start) {
+        textHari.innerText = hitungHariKerja(start, end);
+        infoBox.classList.remove('hidden');
       } else {
         infoBox.classList.add('hidden');
       }
+    } else if(infoBox) {
+      infoBox.classList.add('hidden');
     }
   }
 
@@ -427,9 +461,7 @@
     flatpickr(".date-picker", {
       locale: "id",
       dateFormat: "Y-m-d",
-      onChange: function() {
-        kalkulasiCuti();
-      },
+      onChange: kalkulasiCuti,
       onDayCreate: function(dObj, dStr, fp, dayElem) {
         const tzDate = new Date(dayElem.dateObj.getTime() - (dayElem.dateObj.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
         const day = dayElem.dateObj.getDay();
@@ -447,65 +479,45 @@
     btn.innerText = "Memeriksa...";
     btn.disabled = true;
 
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxw5pFFdDHsf2w4u4-mhmsR9T5dY3NDVFcPl3YOUXRyeMjAb2pSs_-UM6Zh63wV1pZc/exec';
     const formData = new FormData(form);
     formData.append('action', 'login');
 
     try {
-      const response = await fetch(scriptURL, { method: 'POST', body: formData });
+      const response = await fetch(SCRIPT_URL, { method: 'POST', body: formData });
       const result = await response.json();
       
       if (result.result === 'success') {
         loggedInUser = result.nama;
         loggedInJabatan = result.jabatan || "Staf / Pengelola";
+        isManager = loggedInJabatan.toLowerCase().includes('manajer') || loggedInJabatan.toLowerCase().includes('manager');
         
-        const avatarInitial = document.getElementById('avatar-initial');
-        if (avatarInitial) avatarInitial.innerText = loggedInUser.charAt(0).toUpperCase();
+        // Setup UI Profil
+        document.getElementById('avatar-initial').innerText = loggedInUser.charAt(0).toUpperCase();
+        document.getElementById('profile-name').innerText = loggedInUser;
+        document.getElementById('profile-role').innerText = loggedInJabatan;
+        document.getElementById('title-role').innerText = isManager ? "Manajer" : "Pengelola";
         
-        const profileName = document.getElementById('profile-name');
-        if (profileName) profileName.innerText = loggedInUser;
-        
-        const profileRole = document.getElementById('profile-role');
-        if (profileRole) profileRole.innerText = loggedInJabatan;
-        
-        const profileId = document.getElementById('profile-id');
-        if (profileId) profileId.innerText = result.idKaryawan || "-";
-        
-        const profileTglMasuk = document.getElementById('profile-tgl-masuk');
-        const profileMasaKerja = document.getElementById('profile-masa-kerja');
-        if (result.tglMasuk) {
-          const tDate = new Date(result.tglMasuk);
-          if (profileTglMasuk) profileTglMasuk.innerText = formatDateIndo(tDate);
-          
-          const now = new Date();
-          let years = now.getFullYear() - tDate.getFullYear();
-          if (now.getMonth() < tDate.getMonth() || (now.getMonth() === tDate.getMonth() && now.getDate() < tDate.getDate())) {
-              years--;
-          }
-          if (profileMasaKerja) profileMasaKerja.innerText = years > 0 ? `${years} Tahun` : "Kurang dari setahun";
+        // Atur Navigasi berdasarkan Role
+        const navForm = document.getElementById('nav-item-form');
+        const navApprov = document.getElementById('nav-item-approval');
+        if(isManager) {
+          navForm.classList.add('hidden');
+          navApprov.classList.remove('hidden');
+          navApprov.classList.add('flex');
         } else {
-          if (profileTglMasuk) profileTglMasuk.innerText = "-";
-          if (profileMasaKerja) profileMasaKerja.innerText = "-";
-        }
-
-        const profileTglPensiun = document.getElementById('profile-tgl-pensiun');
-        if (profileTglPensiun) profileTglPensiun.innerText = result.tglPensiun || "-";
-        
-        const jobContainer = document.getElementById('profile-jobdesk');
-        if (jobContainer) {
-          jobContainer.innerHTML = "";
-          if (result.jobDesk && result.jobDesk !== "-") {
-            const tasks = result.jobDesk.split(',');
-            tasks.forEach(task => {
-              jobContainer.innerHTML += `<li>${task.trim()}</li>`;
-            });
-          } else {
-            jobContainer.innerHTML = "<li>Belum ada data.</li>";
-          }
+          navForm.classList.remove('hidden');
+          navForm.classList.add('flex');
+          navApprov.classList.add('hidden');
         }
 
         switchView('view-dashboard');
         fetchDashboardData();
+        
+        if(isManager) {
+          fetchPendingApprovals();
+        } else {
+          fetchKaryawanList(); // Ambil list karyawan untuk menu delegasi form
+        }
       } else {
         showAlert("Login Gagal", result.message);
       }
@@ -518,12 +530,10 @@
   }
 
   function updateNavState(activeView) {
-    const navItems = ['dashboard', 'form', 'calendar', 'profile'];
-    
+    const navItems = ['dashboard', 'form', 'approval', 'calendar', 'profile'];
     navItems.forEach(item => {
       const icon = document.getElementById(`nav-icon-${item}`);
       const text = document.getElementById(`nav-text-${item}`);
-      
       if (icon && text) {
         if (`view-${item}` === activeView) {
           icon.classList.remove('text-gray-400');
@@ -541,8 +551,7 @@
   }
 
   function switchView(viewId) {
-    const views = ['view-login', 'view-dashboard', 'view-form', 'view-calendar', 'view-profile'];
-    
+    const views = ['view-login', 'view-dashboard', 'view-form', 'view-approval', 'view-calendar', 'view-profile'];
     views.forEach(id => {
       const el = document.getElementById(id);
       if (el) {
@@ -556,82 +565,76 @@
       target.classList.remove('hidden');
       if (viewId === 'view-login') {
         target.classList.add('flex');
-        const loginForm = document.getElementById('loginForm');
-        if (loginForm) loginForm.reset();
+        document.getElementById('loginForm')?.reset();
       } else {
         target.classList.add('block');
         updateNavState(viewId);
       }
     }
     window.scrollTo(0, 0);
+
+    // Refresh approval if manager opens the tab
+    if(viewId === 'view-approval' && isManager) fetchPendingApprovals();
   }
 
   function showAlert(title, message) {
-    const alertTitle = document.getElementById('alert-title');
-    const alertMessage = document.getElementById('alert-message');
-    const alertModal = document.getElementById('alert-modal');
-    
-    if (alertTitle) alertTitle.innerText = title;
-    if (alertMessage) alertMessage.innerText = message;
-    if (alertModal) alertModal.classList.remove('hidden');
+    document.getElementById('alert-title').innerText = title;
+    document.getElementById('alert-message').innerText = message;
+    document.getElementById('alert-modal').classList.remove('hidden');
   }
 
   function closeAlert() {
-    const alertModal = document.getElementById('alert-modal');
-    if (alertModal) alertModal.classList.add('hidden');
+    document.getElementById('alert-modal').classList.add('hidden');
   }
 
   function showSuccess() {
-    const successModal = document.getElementById('success-modal');
-    if (successModal) successModal.classList.remove('hidden');
+    document.getElementById('success-modal').classList.remove('hidden');
   }
 
   function closeSuccess() {
-    const successModal = document.getElementById('success-modal');
-    if (successModal) successModal.classList.add('hidden');
-    
-    const cutiForm = document.getElementById('cutiForm');
-    if (cutiForm) cutiForm.reset();
-    
-    const infoKalkulasi = document.getElementById('info_kalkulasi');
-    if (infoKalkulasi) infoKalkulasi.classList.add('hidden');
-    
-    const detailCuti = document.getElementById('detail_cuti');
-    if (detailCuti) detailCuti.classList.add('hidden');
-    
+    document.getElementById('success-modal').classList.add('hidden');
+    document.getElementById('cutiForm')?.reset();
+    document.getElementById('info_kalkulasi')?.classList.add('hidden');
+    document.getElementById('detail_cuti')?.classList.add('hidden');
     switchView('view-dashboard');
     fetchDashboardData();
   }
 
   function printForm() {
-    const printNama = document.getElementById('print-nama');
-    if (printNama) printNama.innerText = currentPrintData.nama || "-";
-    
-    const printJabatan = document.getElementById('print-jabatan');
-    if (printJabatan) printJabatan.innerText = currentPrintData.jabatan || "-";
-    
-    const printJenis = document.getElementById('print-jenis');
-    if (printJenis) printJenis.innerText = currentPrintData.jenis || "-";
-    
-    const printDurasi = document.getElementById('print-durasi');
-    if (printDurasi) printDurasi.innerText = currentPrintData.durasi || "0";
-    
-    const printMulai = document.getElementById('print-mulai');
-    if (printMulai) printMulai.innerText = formatDateIndo(currentPrintData.mulai);
-    
-    const printSelesai = document.getElementById('print-selesai');
-    if (printSelesai) printSelesai.innerText = formatDateIndo(currentPrintData.selesai);
-    
-    const printAlasan = document.getElementById('print-alasan');
-    if (printAlasan) printAlasan.innerText = currentPrintData.alasan || "-";
-    
-    const printTglPengajuan = document.getElementById('print-tgl-pengajuan');
-    if (printTglPengajuan) printTglPengajuan.innerText = formatDateIndo(currentPrintData.tglPengajuan);
-    
-    const printTtdNama = document.getElementById('print-ttd-nama');
-    if (printTtdNama) printTtdNama.innerText = currentPrintData.nama || "-";
-    
+    document.getElementById('print-nama').innerText = currentPrintData.nama || "-";
+    document.getElementById('print-jabatan').innerText = currentPrintData.jabatan || "-";
+    document.getElementById('print-jenis').innerText = currentPrintData.jenis || "-";
+    document.getElementById('print-durasi').innerText = currentPrintData.durasi || "0";
+    document.getElementById('print-mulai').innerText = formatDateIndo(currentPrintData.mulai);
+    document.getElementById('print-selesai').innerText = formatDateIndo(currentPrintData.selesai);
+    document.getElementById('print-delegasi').innerText = currentPrintData.delegasi || "-";
+    document.getElementById('print-alasan').innerText = currentPrintData.alasan || "-";
+    document.getElementById('print-tgl-pengajuan').innerText = formatDateIndo(currentPrintData.tglPengajuan);
+    document.getElementById('print-ttd-nama').innerText = currentPrintData.nama || "-";
     window.print();
+  }
+
+  // AMBIL LIST KARYAWAN UNTUK DELEGASI
+  async function fetchKaryawanList() {
+    const formData = new FormData();
+    formData.append('action', 'get_karyawan');
+
+    try {
+      const response = await fetch(SCRIPT_URL, { method: 'POST', body: formData });
+      const result = await response.json();
+      
+      const selectDelegasi = document.getElementById('delegasi');
+      if (result.result === 'success' && result.data) {
+        selectDelegasi.innerHTML = '<option value="">Pilih Karyawan Pengganti...</option>';
+        result.data.forEach(nama => {
+          if (nama !== loggedInUser) { // Jangan tampilkan nama sendiri
+            selectDelegasi.innerHTML += `<option value="${nama}">${nama}</option>`;
+          }
+        });
+      }
+    } catch(e) {
+      console.log("Belum ada script get_karyawan atau gagal fetch");
+    }
   }
 
   async function submitForm(event) {
@@ -640,11 +643,9 @@
     const form = event.target;
     
     const jenis = document.getElementById('jenis_cuti').value;
-    const tglMulaiStr = document.getElementById('tgl_mulai').value;
-    const tglSelesaiStr = document.getElementById('tgl_selesai').value;
-    const tglMulai = new Date(tglMulaiStr);
-    const tglSelesai = new Date(tglSelesaiStr);
-    const alasanText = document.getElementById('alasan').value;
+    const delegasi = document.getElementById('delegasi').value;
+    const tglMulai = new Date(document.getElementById('tgl_mulai').value);
+    const tglSelesai = new Date(document.getElementById('tgl_selesai').value);
     
     if (tglSelesai < tglMulai) {
       showAlert("Tanggal Tidak Valid", "Tanggal selesai tidak boleh mendahului tanggal mulai.");
@@ -652,35 +653,23 @@
     }
 
     const diffDays = hitungHariKerja(tglMulai, tglSelesai);
-
-    if ((jenis === 'Cuti Tahunan' || jenis === 'Tahunan') && diffDays > 12) {
-      showAlert("Batas Cuti Melebihi Aturan", "Sesuai UU Ketenagakerjaan, jatah cuti tahunan maksimal adalah 12 hari.");
-      return;
-    }
-
     currentPrintData = {
-      nama: loggedInUser,
-      jabatan: loggedInJabatan,
-      jenis: jenis,
-      mulai: tglMulai,
-      selesai: tglSelesai,
-      durasi: diffDays,
-      alasan: alasanText,
-      tglPengajuan: new Date()
+      nama: loggedInUser, jabatan: loggedInJabatan, jenis: jenis, delegasi: delegasi,
+      mulai: tglMulai, selesai: tglSelesai, durasi: diffDays,
+      alasan: document.getElementById('alasan').value, tglPengajuan: new Date()
     };
 
     btn.innerText = "Mengirim...";
     btn.disabled = true;
 
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxw5pFFdDHsf2w4u4-mhmsR9T5dY3NDVFcPl3YOUXRyeMjAb2pSs_-UM6Zh63wV1pZc/exec'; 
-    
     try {
       const formData = new FormData(form);
       formData.append('action', 'ajukan_cuti');
       formData.append('nama_pengelola', loggedInUser);
+      formData.append('status', 'Menunggu Persetujuan'); // Status default
       formData.append('tanggal_pengajuan', new Date().toLocaleDateString('id-ID'));
 
-      await fetch(scriptURL, { method: 'POST', body: formData });
+      await fetch(SCRIPT_URL, { method: 'POST', body: formData });
       showSuccess();
     } catch (error) {
       showAlert("Gagal Mengirim", "Terjadi kesalahan sistem. Coba lagi nanti.");
@@ -690,25 +679,86 @@
     }
   }
 
+  // FUNGSI UNTUK MANAJER: AMBIL DAFTAR MENUNGGU PERSETUJUAN
+  async function fetchPendingApprovals() {
+    const container = document.getElementById('container-approval-list');
+    container.innerHTML = '<p class="text-sm text-gray-500 bg-white p-4 rounded-xl text-center shadow-sm">Memuat pengajuan...</p>';
+
+    const formData = new FormData();
+    formData.append('action', 'get_pending_cuti');
+
+    try {
+      const response = await fetch(SCRIPT_URL, { method: 'POST', body: formData });
+      const result = await response.json();
+      
+      container.innerHTML = '';
+      if (result.result === 'success' && result.data && result.data.length > 0) {
+        result.data.forEach(item => {
+          container.innerHTML += `
+            <div class="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
+              <div class="flex justify-between items-start mb-3">
+                <div>
+                  <h3 class="font-bold text-gray-900 text-[16px]">${item.nama}</h3>
+                  <p class="text-[11px] font-medium text-gray-500">${item.jenis}</p>
+                </div>
+                <span class="bg-orange-100 text-orange-600 text-[10px] font-bold px-3 py-1 rounded-full">Menunggu</span>
+              </div>
+              <div class="mb-4 space-y-1">
+                <p class="text-xs text-gray-700"><strong>Tanggal:</strong> ${item.tglMulai} s/d ${item.tglSelesai}</p>
+                <p class="text-xs text-gray-700"><strong>Delegasi:</strong> ${item.delegasi || '-'}</p>
+                <p class="text-xs text-gray-700 italic">"${item.alasan}"</p>
+              </div>
+              <div class="flex gap-3 border-t border-gray-50 pt-3">
+                <button onclick="prosesPersetujuan('${item.id}', 'Ditolak')" class="flex-1 bg-red-50 text-red-600 font-semibold py-2 rounded-xl text-sm border border-red-100 hover:bg-red-100 transition">Tolak</button>
+                <button onclick="prosesPersetujuan('${item.id}', 'Disetujui')" class="flex-1 bg-[#34A853] text-white font-semibold py-2 rounded-xl text-sm hover:bg-green-600 transition">Setujui</button>
+              </div>
+            </div>
+          `;
+        });
+      } else {
+        container.innerHTML = `
+          <div class="bg-white p-8 rounded-2xl text-center shadow-sm border border-gray-50">
+            <span class="material-symbols-outlined text-4xl text-gray-300 mb-2">inbox</span>
+            <p class="text-sm text-gray-500">Tidak ada pengajuan yang menunggu.</p>
+          </div>
+        `;
+      }
+    } catch (error) {
+      container.innerHTML = '<p class="text-sm text-red-500 p-4">Gagal memuat data. Pastikan Apps Script siap.</p>';
+    }
+  }
+
+  // FUNGSI UNTUK MANAJER: SETUJUI ATAU TOLAK
+  async function prosesPersetujuan(idCuti, status) {
+    if(!confirm(`Anda yakin ingin memberikan status "${status}" pada pengajuan ini?`)) return;
+
+    const formData = new FormData();
+    formData.append('action', 'update_status_cuti');
+    formData.append('id_cuti', idCuti);
+    formData.append('status', status);
+
+    try {
+      await fetch(SCRIPT_URL, { method: 'POST', body: formData });
+      showAlert("Berhasil", `Pengajuan berhasil ${status.toLowerCase()}.`);
+      fetchPendingApprovals(); // Refresh list
+    } catch (error) {
+      showAlert("Gagal", "Terjadi kesalahan saat memproses data.");
+    }
+  }
+
   async function fetchDashboardData() {
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxw5pFFdDHsf2w4u4-mhmsR9T5dY3NDVFcPl3YOUXRyeMjAb2pSs_-UM6Zh63wV1pZc/exec';
     const formData = new FormData();
     formData.append('action', 'get_dashboard');
     formData.append('nama_pengelola', loggedInUser);
 
     try {
-      const response = await fetch(scriptURL, { method: 'POST', body: formData });
+      const response = await fetch(SCRIPT_URL, { method: 'POST', body: formData });
       const result = await response.json();
       
       if (result.result === 'success') {
-        const valTotal = document.getElementById('val-total');
-        if (valTotal) valTotal.innerText = result.totalCuti || 12;
-        
-        const valTerpakai = document.getElementById('val-terpakai');
-        if (valTerpakai) valTerpakai.innerText = result.terpakai || 0;
-        
-        const valSisa = document.getElementById('val-sisa');
-        if (valSisa) valSisa.innerText = result.sisa || 12;
+        if(document.getElementById('val-total')) document.getElementById('val-total').innerText = result.totalCuti || 12;
+        if(document.getElementById('val-terpakai')) document.getElementById('val-terpakai').innerText = result.terpakai || 0;
+        if(document.getElementById('val-sisa')) document.getElementById('val-sisa').innerText = result.sisa || 12;
         
         referensiCuti = result.referensi || [];
         calendarLeaves = result.semuaCuti || [];
@@ -726,6 +776,7 @@
               let color = 'bg-[#FBC02D] text-gray-900';
               if (akt.status === 'Disetujui') color = 'bg-[#43A047] text-white';
               if (akt.status === 'Ditolak') color = 'bg-[#E53935] text-white';
+              if (akt.status === 'Menunggu Persetujuan') color = 'bg-orange-400 text-white';
               
               aktContainer.innerHTML += `
                 <div class="py-4 border-b border-gray-100 last:border-0 last:pb-0 first:pt-0">
@@ -735,29 +786,7 @@
                       <p class="text-xs text-gray-500 mb-1">${akt.tglMulai} - ${akt.tglSelesai}</p>
                       <span class="text-xs font-medium text-gray-700">${akt.jenis}</span>
                     </div>
-                    <span class="${color} text-[10px] font-bold px-3 py-1 rounded-full">${akt.status}</span>
-                  </div>
-                </div>
-              `;
-            });
-          }
-        }
-
-        const timContainer = document.getElementById('container-tim-cuti');
-        if (timContainer) {
-          timContainer.innerHTML = '';
-          if (!result.timCuti || result.timCuti.length === 0) {
-            timContainer.innerHTML = '<p class="text-xs text-gray-500">Tidak ada tim yang cuti hari ini.</p>';
-          } else {
-            result.timCuti.forEach(tim => {
-              timContainer.innerHTML += `
-                <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-full bg-[#E4F1E8] flex items-center justify-center border border-green-100">
-                    <span class="material-symbols-outlined text-[#77B38C] text-sm">person</span>
-                  </div>
-                  <div class="flex flex-col">
-                    <span class="text-xs font-semibold text-gray-800">${tim.nama}</span>
-                    <span class="text-[10px] text-gray-500">${tim.jenis}</span>
+                    <span class="${color} text-[10px] font-bold px-3 py-1 rounded-full">${akt.status || 'Menunggu'}</span>
                   </div>
                 </div>
               `;
@@ -773,35 +802,21 @@
   function populateLeaveTypes() {
     const select = document.getElementById('jenis_cuti');
     if (!select) return;
-    
     select.innerHTML = '<option value="">Pilih Jenis Cuti...</option>';
-    
     if (!referensiCuti || referensiCuti.length === 0) {
       select.innerHTML += '<option value="Cuti Tahunan">Cuti Tahunan</option><option value="Izin Sakit">Izin Sakit</option>';
       return;
     }
     referensiCuti.forEach(item => {
-      const opt = document.createElement('option');
       const val = item.jenis || item;
-      opt.value = val;
-      opt.textContent = val;
-      select.appendChild(opt);
+      select.innerHTML += `<option value="${val}">${val}</option>`;
     });
   }
 
   function showLeaveDetails() {
-    const select = document.getElementById('jenis_cuti');
+    const val = document.getElementById('jenis_cuti').value;
     const detailBox = document.getElementById('detail_cuti');
-    if (!select || !detailBox) return;
-    
-    const selectedVal = select.value;
-
-    if (!selectedVal) {
-      detailBox.classList.add('hidden');
-      return;
-    }
-
-    const ref = referensiCuti.find(r => (r.jenis || r) === selectedVal);
+    const ref = referensiCuti.find(r => (r.jenis || r) === val);
 
     if (ref && ref.durasi) {
       detailBox.innerHTML = `<strong>Maksimal:</strong> ${ref.durasi} Hari<br><strong>Aturan:</strong> ${ref.keterangan}`;
@@ -845,7 +860,6 @@
     for (let i = 1; i <= daysInMonth; i++) {
       const cellDate = new Date(year, month, i);
       cellDate.setHours(0,0,0,0);
-
       const cellTzDate = new Date(cellDate.getTime() - (cellDate.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
       const isWeekend = cellDate.getDay() === 0 || cellDate.getDay() === 6;
       const isLibur = liburNasional.includes(cellTzDate);
@@ -853,6 +867,8 @@
 
       let dotsHTML = '';
       let leavesToday = (calendarLeaves || []).filter(leave => {
+         // Hanya tampilkan jika statusnya Disetujui
+         if(leave.status && leave.status !== 'Disetujui') return false; 
          const start = new Date(leave.tglMulai);
          const end = new Date(leave.tglSelesai);
          start.setHours(0,0,0,0);
@@ -878,7 +894,6 @@
         </div>
       `;
     }
-    
     showStaffOnLeave(today.getFullYear(), today.getMonth(), today.getDate());
   }
 
@@ -890,17 +905,13 @@
   function showStaffOnLeave(year, month, day) {
     const selectedDate = new Date(year, month, day);
     selectedDate.setHours(0,0,0,0);
-    
     const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-    const labelStafCuti = document.getElementById('label-staf-cuti');
-    if (labelStafCuti) labelStafCuti.textContent = `Staf Cuti: ${day} ${monthNames[month]}`;
-    
+    document.getElementById('label-staf-cuti').textContent = `Staf Cuti: ${day} ${monthNames[month]}`;
     const container = document.getElementById('container-staf-kalender');
-    if (!container) return;
-    
     container.innerHTML = '';
 
     let leavesToday = (calendarLeaves || []).filter(leave => {
+       if(leave.status && leave.status !== 'Disetujui') return false; 
        const start = new Date(leave.tglMulai);
        const end = new Date(leave.tglSelesai);
        start.setHours(0,0,0,0);
